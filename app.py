@@ -87,7 +87,24 @@ def view(date):
     log_cur = db.execute(log_sql, [date])
     log_results = log_cur.fetchall()
 
-    return render_template('day.html', date=pretty_date, food_results=food_results, log_results=log_results)
+    totals = dict()
+    totals['protein'] = 0
+    totals['carbohydrates'] = 0
+    totals['fat'] = 0
+    totals['calories'] = 0
+
+    for food in log_results:
+        totals['protein'] += int(food['protein'])
+        totals['carbohydrates'] += int(food['carbohydrates'])
+        totals['fat'] += int(food['fat'])
+        totals['calories'] += int(food['calories'])
+
+    print(totals.values())
+    return render_template('day.html',
+                           date=pretty_date,
+                           food_results=food_results,
+                           log_results=log_results,
+                           totals=totals)
 
 
 @app.route('/food', methods=['GET', 'POST'])

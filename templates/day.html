@@ -26,27 +26,17 @@
 
                         </form>
 
-                        <div class="page-header"></div>
-
-                        <ul class="nav nav-pills" role="tablist">
-                            <li class="active"><a>Total</a></li>
-                            <li><a>Protein: <span class="badge">100</span></a></li>
-                            <li><a>Carbohydates: <span class="badge">200</span></a></li>
-                            <li><a>Fat: <span class="badge">50</span></a></li>
-                            <li><a>Calories: <span class="badge">1650</span></a></li>
-                        </ul>
-
                     </div>
 
                     <div class="page-header"></div>
                     <table class="table table-hover table-responsive">
                         <thead>
                         <tr>
-                            <th class="col-*">Name</th>
-                            <th class="col-lg-2 text-right">Protein</th>
-                            <th class="col-lg-2 text-right">Carbs</th>
-                            <th class="col-lg-2 text-right">Fat</th>
-                            <th class="col-lg-2 text-right">Calories</th>
+                            <th class="col-* lead">Name</th>
+                            <th class="col-lg-2 text-right lead">Protein</th>
+                            <th class="col-lg-2 text-right lead">Carbs</th>
+                            <th class="col-lg-2 text-right lead">Fat</th>
+                            <th class="col-lg-2 text-right lead">Calories</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -60,6 +50,13 @@
                                 <td class="text-right">{{ food.calories }}</td>
                             </tr>
                         {% endfor %}
+
+                        <tr>
+                            <td class="bg-info lead">Total</td>
+                            {% for value in totals.values() %}
+                                <td class="text-right text-info lead">{{ value }}</td>
+                            {% endfor %}
+                        </tr>
                         </tbody>
                     </table>
                 </div>
