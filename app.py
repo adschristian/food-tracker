@@ -42,17 +42,19 @@ def index():
     cur = db.execute('select * from log_date order by entry_date desc')
     results = cur.fetchall()
 
-    pretty_results = list()
+    date_results = list()
 
     for item in results:
         single_date = dict()
 
+        single_date['entry_date'] = item['entry_date']
+
         dt = datetime.strptime(str(item['entry_date']), '%Y%m%d')
-        single_date['entry_date'] = datetime.strftime(dt, '%B %d, %Y')
+        single_date['pretty_date'] = datetime.strftime(dt, '%B %d, %Y')
 
-        pretty_results.append(single_date)
+        date_results.append(single_date)
 
-    return render_template('home.html', results=pretty_results)
+    return render_template('home.html', results=date_results)
 
 
 @app.route('/view/<date>', methods=['GET', 'POST'])
@@ -101,7 +103,8 @@ def view(date):
 
     print(totals.values())
     return render_template('day.html',
-                           date=pretty_date,
+                           entry_date=date_result['entry_date'],
+                           pretty_date=pretty_date,
                            food_results=food_results,
                            log_results=log_results,
                            totals=totals)
