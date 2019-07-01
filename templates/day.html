@@ -17,7 +17,7 @@
                             <div class="form-group">
                                 <select class="form-control" name="food-select">
                                     {% for food in food_results %}
-                                    <option value="{{ food.id }}">{{ food.name }}</option>
+                                        <option value="{{ food.id }}">{{ food.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -39,17 +39,29 @@
                     </div>
 
                     <div class="page-header"></div>
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                        <tr>
+                            <th class="col-*">Name</th>
+                            <th class="col-lg-2 text-right">Protein</th>
+                            <th class="col-lg-2 text-right">Carbs</th>
+                            <th class="col-lg-2 text-right">Fat</th>
+                            <th class="col-lg-2 text-right">Calories</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                    <div class="panel-body">
-                        <ul class="nav nav-pills" role="tablist">
-                            <li class="active"><a>Pizza</a></li>
-                            <li><a>Protein: <span class="badge">100</span></a></li>
-                            <li><a>Carbohydates: <span class="badge">200</span></a></li>
-                            <li><a>Fat: <span class="badge">50</span></a></li>
-                            <li><a>Calories: <span class="badge">1650</span></a></li>
-                        </ul>
-                    </div>
-
+                        {% for food in log_results %}
+                            <tr id="{{ food.id }}">
+                                <td class="text-primary">{{ food.name }}</td>
+                                <td class="text-right">{{ food.protein }}</td>
+                                <td class="text-right">{{ food.carbohydrates }}</td>
+                                <td class="text-right">{{ food.fat }}</td>
+                                <td class="text-right">{{ food.calories }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
