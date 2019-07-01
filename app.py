@@ -1,6 +1,7 @@
 import sqlite3
 
 from flask import Flask, render_template, g, request, jsonify, redirect, url_for
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -23,8 +24,21 @@ def close_db(error):
         g.sqlite_db.close()
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    db = get_db()
+
+    if request.method == 'POST':
+        date = request.form['date']
+
+        dt = datetime.strptime(date, '%Y-%m-%d')
+        db_date = datetime.strftime(dt, '%Y%m%d')
+
+        db.execute('insert into log_date(entry_date) values(?)', [db_date])
+        db.commit()
+
+        return redirect(url_for('index'))
+
     return render_template('home.html')
 
 
