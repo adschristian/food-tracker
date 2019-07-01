@@ -39,7 +39,19 @@ def index():
 
         return redirect(url_for('index'))
 
-    cur = db.execute('select * from log_date order by entry_date desc')
+    sql = ' '.join(['select log_date.entry_date,'
+                    'sum(food.protein) as protein,',
+                    'sum(food.carbohydrates) as carbohydrates,',
+                    'sum(food.fat) as fat,',
+                    'sum(food.calories) as calories',
+                    'from log_date',
+                    'join food_date',
+                    'on food_date.log_date_id = log_date.id',
+                    'join food',
+                    'on food.id = food_date.food_id',
+                    'group by log_date.id',
+                    '{}'])
+    cur = db.execute(sql.format('order by entry_date desc'))
     results = cur.fetchall()
 
     date_results = list()
@@ -48,6 +60,10 @@ def index():
         single_date = dict()
 
         single_date['entry_date'] = item['entry_date']
+        single_date['protein'] = item['protein']
+        single_date['carbohydrates'] = item['carbohydrates']
+        single_date['fat'] = item['fat']
+        single_date['calories'] = item['calories']
 
         dt = datetime.strptime(str(item['entry_date']), '%Y%m%d')
         single_date['pretty_date'] = datetime.strftime(dt, '%B %d, %Y')
@@ -101,7 +117,6 @@ def view(date):
         totals['fat'] += int(food['fat'])
         totals['calories'] += int(food['calories'])
 
-    print(totals.values())
     return render_template('day.html',
                            entry_date=date_result['entry_date'],
                            pretty_date=pretty_date,
