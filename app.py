@@ -57,15 +57,19 @@ def index():
 
 @app.route('/view/<date>', methods=['GET', 'POST'])
 def view(date):
-    if request.method == 'POST':
-        return jsonify(request.form['food-select'])
     db = get_db()
 
     date_cur = db.execute('select * from log_date where entry_date = ?', [date])
+    date_result = date_cur.fetchone()
 
-    result = date_cur.fetchone()
+    if request.method == 'POST':
+        food_id = request.form['food-select']
+        date_id = date_result['id']
 
-    dt = datetime.strptime(str(result['entry_date']), '%Y%m%d')
+        db.execute('insert into food_date(food_id, log_date_id) values(?, ?)', [food_id, date_id])
+        db.commit()
+
+    dt = datetime.strptime(str(date_result['entry_date']), '%Y%m%d')
     pretty_date = datetime.strftime(dt, '%B %d, %Y')
 
     food_cur = db.execute('select id, name from food')
