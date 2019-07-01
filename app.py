@@ -39,7 +39,20 @@ def index():
 
         return redirect(url_for('index'))
 
-    return render_template('home.html')
+    cur = db.execute('select * from log_date order by entry_date desc')
+    results = cur.fetchall()
+
+    pretty_results = list()
+
+    for item in results:
+        single_date = dict()
+
+        dt = datetime.strptime(str(item['entry_date']), '%Y%m%d')
+        single_date['entry_date'] = datetime.strftime(dt, '%B %d, %Y')
+
+        pretty_results.append(single_date)
+
+    return render_template('home.html', results=pretty_results)
 
 
 @app.route('/view')
